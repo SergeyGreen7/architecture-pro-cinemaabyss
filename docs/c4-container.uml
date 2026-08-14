@@ -1,0 +1,34 @@
+@startuml C4_Container
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+title CinemaAbyss — Container Diagram (to-be)
+
+Person(client, "Client", "Browser / mobile / API consumer")
+
+System_Boundary(cinemaabyss, "CinemaAbyss") {
+    Container(proxy, "Proxy (API Gateway)", "HTTP :8000", "Единая точка вызова. Strangler Fig: маршрутизация по фиче-флагам")
+    Container(monolith, "Monolith", "HTTP :8080", "Legacy fallback до полной миграции доменов")
+    Container(movies, "Movies Service", "HTTP :8081", "Домен Catalog: метаданные фильмов, рейтинги, жанры")
+    Container(users, "Users Service", "HTTP :8083", "Домен Identity: регистрация, профили, аутентификация")
+    Container(payments, "Payments Service", "HTTP :8084", "Домен Billing: платежи, статусы транзакций")
+    Container(subscriptions, "Subscriptions Service", "HTTP :8085", "Домен Subscriptions: подписки пользователя")
+    Container(events, "Events Service", "HTTP :8082", "Домен Events: produce/consume в Kafka")
+    ContainerDb(postgres, "PostgreSQL", "RDBMS :5432", "Общая БД для Monolith и доменных сервисов")
+    ContainerQueue(kafka, "Kafka", "Message broker :9092", "Топики movie-events, user-events, payment-events")
+}
+
+Rel(client, proxy, "HTTPS/HTTP", "REST API")
+Rel(proxy, movies, "HTTP", "/api/movies")
+Rel(proxy, users, "HTTP", "/api/users")
+Rel(proxy, payments, "HTTP", "/api/payments")
+Rel(proxy, subscriptions, "HTTP", "/api/subscriptions")
+Rel(proxy, events, "HTTP", "/api/events")
+Rel(proxy, monolith, "HTTP", "fallback до полной миграции")
+Rel(monolith, postgres, "SQL")
+Rel(movies, postgres, "SQL")
+Rel(users, postgres, "SQL")
+Rel(payments, postgres, "SQL")
+Rel(subscriptions, postgres, "SQL")
+Rel(events, kafka, "produce/consume", "Kafka protocol")
+
+@enduml

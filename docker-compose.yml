@@ -108,7 +108,7 @@ services:
     depends_on:
       - monolith
       - movies-service
-      - events-service
+    # events-service: add back to depends_on after implementing ./src/microservices/events
     ports:
       - "8000:8000"
     environment:
