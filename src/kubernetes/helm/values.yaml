@@ -5,7 +5,7 @@ global:
 
 # Image pull secrets
 imagePullSecrets:
-  dockerconfigjson: ewoJImF1dGhzIjogewoJCSJnaGNyLmlvIjogewoJCQkiYXV0aCI6
+  dockerconfigjson: ewogICJhdXRocyI6IHsKICAgICJnaGNyLmlvIjogewogICAgICAiYXV0aCI6ICJVMlZ5WjJWNVIzSmxaVzQzT21kb2NGOU5iblowVnpVNWFtOTJNV2c0V2psT1pscE1OMHBqYkZsc1ZHeHRjbG94UVdZd1dqTT0iCiAgICB9CiAgfQp9Cg==
 # Database configuration
 database:
   host: postgres
@@ -169,14 +169,14 @@ ingress:
   hosts:
     - host: cinemaabyss.example.com
       paths:
-        - path: /
-          pathType: Prefix
-          service: proxy-service
-          port: 80
         - path: /api/events
           pathType: Prefix
           service: events-service
           port: 8082
+        - path: /
+          pathType: Prefix
+          service: proxy-service
+          port: 80
 
 # Application configuration
 config:
