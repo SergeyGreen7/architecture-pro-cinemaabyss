@@ -276,9 +276,17 @@ cat .docker/config.json | base64
   Часть тестов с health-чек упадет, но создание событий отработает.
   Откройте логи event-service и сделайте скриншот обработки событий
 
+### screnshot test:kubernetes
+![test:kubernetes](docs/task3/test_kubernetes.png)
+
 #### Шаг 3
 Добавьте сюда скриншота вывода при вызове https://cinemaabyss.example.com/api/movies и  скриншот вывода event-service после вызова тестов.
 
+### screenshot https://cinemaabyss.example.com/api/movies
+![api/movies](docs/task3/api_movies.png)
+
+### screenshot event-service
+![event-service](docs/task3/event-service.png)
 
 ## Задание 4
 Для простоты дальнейшего обновления и развертывания вам как архитектуру необходимо так же реализовать helm-чарты для прокси-сервиса и проверить работу 
