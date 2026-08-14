@@ -5,8 +5,8 @@
 1. Спроектируйте to be архитектуру КиноБездны, разделив всю систему на отдельные домены и организовав интеграционное взаимодействие и единую точку вызова сервисов.
 Результат представьте в виде контейнерной диаграммы в нотации С4.
 Добавьте ссылку на файл в этот шаблон
-[ссылка на файл](ссылка)
 
+![C4_Container.png](docs/C4_Container.png)
 
 ## Задание 2
 
@@ -60,6 +60,12 @@
 Приложите скриншот тестов и скриншот состояния топиков Kafka http://localhost:8090 
 
 
+### kafla screenshot
+![kafka.png](docs/task2/kafka.png)
+
+### test screenshot
+![local_tests.png](docs/task2/local_tests.png)
+
 ## Задание 3
 
 Команда начала переезд в Kubernetes для лучшего масштабирования и повышения надежности. 
@@ -109,7 +115,6 @@ jobs:
 ```
 Как только сборка отработает и в github registry появятся ваши образы, можно переходить к блоку настройки Kubernetes
 Успешным результатом данного шага является "зеленая" сборка и "зеленые" тесты
-
 
 ### Proxy в Kubernetes
 
@@ -271,9 +276,17 @@ cat .docker/config.json | base64
   Часть тестов с health-чек упадет, но создание событий отработает.
   Откройте логи event-service и сделайте скриншот обработки событий
 
+### screnshot test:kubernetes
+![test:kubernetes](docs/task3/test_kubernetes.png)
+
 #### Шаг 3
 Добавьте сюда скриншота вывода при вызове https://cinemaabyss.example.com/api/movies и  скриншот вывода event-service после вызова тестов.
 
+### screenshot https://cinemaabyss.example.com/api/movies
+![api/movies](docs/task3/api_movies.png)
+
+### screenshot event-service
+![event-service](docs/task3/event-service.png)
 
 ## Задание 4
 Для простоты дальнейшего обновления и развертывания вам как архитектуру необходимо так же реализовать helm-чарты для прокси-сервиса и проверить работу 
@@ -333,6 +346,9 @@ kubectl delete  namespace cinemaabyss
 ```bash
 helm install cinemaabyss .\src\kubernetes\helm --namespace cinemaabyss --create-namespace
 ```
+```bash
+helm install cinemaabyss ./src/kubernetes/helm --namespace cinemaabyss --create-namespace
+```
 Если в процессе будет ошибка
 ```code
 [2025-04-08 21:43:38,780] ERROR Fatal error during KafkaServer startup. Prepare to shutdown (kafka.server.KafkaServer)
@@ -349,6 +365,11 @@ minikube tunnel
 https://cinemaabyss.example.com/api/movies
 и приложите скриншот развертывания helm и вывода https://cinemaabyss.example.com/api/movies
 
+### screenshot helm
+![helm](docs/task4/helm.png)
+
+### screenshot api/movies
+![api/movies](docs/task4/api_movies.png)
 
 # Задание 5
 Компания планирует активно развиваться и для повышения надежности, безопасности, реализации сетевых паттернов типа Circuit Breaker и канареечного деплоя вам как архитектору необходимо развернуть istio и настроить circuit breaker для monolith и movies сервисов.
@@ -403,7 +424,7 @@ Code 503 : 399 (79.8 %)
 Можно еще проверить статистику
 
 ```bash
-kubectl exec -n cinemaabyss fortio-deploy-b6757cbbb-7c9qg -c istio-proxy -- pilot-agent request GET stats | grep movies-service | grep pending
+kubectl exec -n cinemaabyss fortio-deploy-78b76b5bdd-gznxm -c istio-proxy -- pilot-agent request GET stats | grep movies-service | grep pending
 ```
 
 И там смотрим 
@@ -414,6 +435,9 @@ You can see 21 for the upstream_rq_pending_overflow value which means 21 calls s
 ```
 
 Приложите скриншот работы circuit breaker'а
+
+### screenshot circuit breaker
+![circuit breaker](docs/task5/circuit_breaker.png)
 
 Удаляем все
 ```bash
